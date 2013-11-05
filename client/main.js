@@ -20,7 +20,6 @@ Meteor.startup(function() {
   // get votes for currently selected poll
   Deps.autorun(function() {
     Meteor.subscribe('votes', Session.get('poll_id'));
-    console.log("updating subscription");
   });
 });
 

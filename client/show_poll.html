@@ -7,17 +7,8 @@
   <div class="well">
     <h1>{{name}}</h1>
     <p class="lead">{{description}}</p>
-    <div class="list-group">
-    {{#each options}}
-      <a href="#" class="list-group-item vote-options" id="{{_id}}">{{name}}
-        <div class="progress" style="float: right; width:25%">
-          <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{percent_votes}}" aria-valuemin='0' aria-valuemax='100' style="width: {{percent_votes}}%" />
-        </div>
-        <span class="badge" style="float: right; margin-right: 5px">{{votes}}</span>
-      </a>
-    {{/each}}
-    </div>
-
+    {{{template_by_type}}
+    
     {{#if editable}}
     <div class="form-inline col-lg-12" role="form">
       <div class="form-group col-lg-12">
@@ -30,3 +21,20 @@
   {{/with}}
 </template>
 
+
+<template name="single">
+  <div class="list-group">
+    {{#each options}}
+      <a href="#" class="list-group-item vote-options" id="{{_id}}">
+        {{#if voted_for}}
+          <span class="glyphicon glyphicon-star"></span>
+        {{/if}}
+        {{name}}
+        <div class="progress" style="float: right; width:25%">
+          <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{percent_votes}}" aria-valuemin='0' aria-valuemax='100' style="width: {{percent_votes}}%" />
+        </div>
+        <span class="badge" style="float: right; margin-right: 5px">{{votes}}</span>
+      </a>
+    {{/each}}
+    </div>
+</template>

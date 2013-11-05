@@ -13,18 +13,11 @@ Template.landing.events({
     $("#create_submit").click(function() {
       var name = $("#name").val();
       var description = $("#description").val();
-      var pollId = Meteor.call('create_poll', name, description);
-      window.location = "/polls/" + pollId;
-
-      // var _id = null;
-      // Polls.insert({timestamp: new Date, name: name, description: description, options: []}, function(err, id) {
-      //   if (err) {
-      //     console.log('Error creating poll: ' + err);
-      //     return false;
-      //   }
-      //   _id = id;
-      //   window.location = "/polls/" + _id;
-      // });
+      var type = $("#type option:selected").attr('id');
+      Meteor.call('create_poll', name, description, type, function(err, pollId) {
+          console.log("new id: " + pollId);
+          window.location = "/polls/" + pollId;
+      });
       return false;
     });
 

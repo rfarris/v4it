@@ -1,22 +1,27 @@
 Meteor.methods({
-  vote: function(poll_id, option_id) {
+  vote: function(poll_id, options) {
     check(poll_id, String);
-    check(option_id, Number);
+    check(options, [Number]);
     var userId = user_id();
-    Votes.upsert({voter: userId, poll: poll_id}, {$set: {option: option_id, created: new Date()}});
+    Votes.upsert({voter: userId, poll: poll_id}, {$set: {options: options, created: new Date()}});
   },
 
-  create_poll: function(name, description) {
+  create_poll: function(name, description, type) {
     check(name, String);
     check(description, String);
-    return Polls.insert({
+    check(type, String);
+    if (!(type == 'single' || type == 'multi' || type == 'ranked')) { throw "Unexpected Type"; }
+    var id = Polls.insert({
       name: name,
       description: description,
+      type: type,
       owner: Meteor.userId(),
       created: new Date(),
       editable: true,
       options: [] 
     });
+    console.log("Created poll: " + id);
+    return id;
   },
 
   debug_reset: function() {
