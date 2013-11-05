@@ -1,0 +1,59 @@
+<head>
+  <title>Vote 4 it. Better than Stephen's version.</title>
+  <link href="jumbotron-narrow.css" rel="stylesheet">
+</head>
+
+<body>
+  <div class="container">
+    {{>header}}
+    {{renderPage}}
+    <div class="footer">
+      <p>&copy; 2013 I-Can-Copy-And-Paste-Bootstrap-Examples, LLC</p>
+    </div>
+  </div>
+</body>
+
+<template name="header">
+  <div class="header">
+    <ul class="nav nav-pills pull-right">
+      <li><a>{{loginButtons align="right"}}</a></li>
+      <li><a href="/about">About</a></li>
+      {{#if admin}}
+      <li><a href="#" id="reset">Reset</a></li>
+      <li><a href="/debug">Debug</a></li>
+      {{/if}}
+    </ul>
+    <h3 class="text-muted"><a href="/">Vote For It</a></h3>
+  </div>
+</template>
+
+<template name="about">
+  <div class="jumbotron">
+    <h1><small>About</small></h1>
+    <h1>
+      This app is the best app.
+    </h1>
+  </div>
+</template>
+
+<template name="debug">
+<h1>Debug</h1>
+
+<h3>User</h3>
+<div class="well">{{#with user}}<pre>{{json}}</pre>{{/with}}</div>
+
+<h3>All Users</h3>
+<div class="well" style="overflow:hidden">
+  {{#each users}}
+    <pre>{{json}}</pre>
+    <button type="button" style="float: right" class="btn btn-primary delete_user_button" id="{{_id}}">Delete</button>
+  {{/each}}
+</div>
+
+<h3>Collection Objects</h3>
+{{#each polls}}
+  <div class="well">
+    <pre>{{json}}</pre>
+  </div>
+{{/each}}
+</template>

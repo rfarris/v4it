@@ -1,0 +1,40 @@
+<template name="create">
+  <form role="form">
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input type="text" class="form-control" id="name" placeholder="Enter name" tabindex="1">
+    </div>
+    <div class="form-group">
+      <label for="description">Description</label>
+      <input type="text" class="form-control" id="description" placeholder="Description" tabindex="2">
+    </div>
+    <button type="submit" class="btn btn-default" id="create_submit" tabindex="3">Create</button>
+  </form>
+</template>
+
+<template name="landing">
+  <div class="jumbotron">
+    <h1>Vote for something.</h1>
+
+    {{#if currentUser}}
+    <p class="lead">
+      Choose from one of the classy polls below.
+    </p>
+    <p>
+     <a class="btn btn-lg btn-success" id="create_button" role="button" href="#">Or create your own</a>
+   </p>
+   {{else}}
+    <p class="lead">Please login.  {{loginButtons}}</p>
+   {{/if}}
+  </div>
+  {{#if currentUser}}
+  <div class="row marketing">
+    {{#each polls}}
+    <div class="col-md-6">
+      <h4><a href="/polls/{{_id}}">{{name}}</a></h4>
+      <p>{{description}}</p>
+    </div>
+    {{/each}}
+  </div>
+  {{/if}}
+</template>

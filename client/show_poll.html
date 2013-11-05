@@ -1,0 +1,32 @@
+
+
+
+
+<template name="poll">
+  {{#with poll}}
+  <div class="well">
+    <h1>{{name}}</h1>
+    <p class="lead">{{description}}</p>
+    <div class="list-group">
+    {{#each options}}
+      <a href="#" class="list-group-item vote-options" id="{{_id}}">{{name}}
+        <div class="progress" style="float: right; width:25%">
+          <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{percent_votes}}" aria-valuemin='0' aria-valuemax='100' style="width: {{percent_votes}}%" />
+        </div>
+        <span class="badge" style="float: right; margin-right: 5px">{{votes}}</span>
+      </a>
+    {{/each}}
+    </div>
+
+    {{#if editable}}
+    <div class="form-inline col-lg-12" role="form">
+      <div class="form-group col-lg-12">
+        <label class="sr-only" for="new_poll">Add option</label>
+        <input type="text" class="form-control input-lg col-lg-12" id="new_poll" placeholder="Add option">
+      </div>
+    </div>
+    {{/if}}
+  </div>
+  {{/with}}
+</template>
+
