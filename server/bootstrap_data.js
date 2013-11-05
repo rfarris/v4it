@@ -7,6 +7,8 @@ if (Meteor.isServer) {
           description: 'Does this application work?',
           timestamp: new Date,
           editable: false,
+          type: 'simple',
+          allowed_votes: 1,
           options: [
           {_id: 1, name: 'Yes'},
           {_id: 2, name: 'No'}
