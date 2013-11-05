@@ -26,6 +26,7 @@ body {
 
 /* Custom page footer */
 .footer {
+  margin-top: 19px;
   padding-top: 19px;
   color: #777;
   border-top: 1px solid #e5e5e5;
@@ -44,7 +45,7 @@ body {
 /* Main marketing message and sign up button */
 .jumbotron {
   text-align: center;
-  border-bottom: 1px solid #e5e5e5;
+  border-bottom: 1px solid #eeeeee;
 }
 .jumbotron .btn {
   font-size: 21px;

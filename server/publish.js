@@ -2,6 +2,10 @@ Meteor.methods({
   vote: function(poll_id, options) {
     check(poll_id, String);
     check(options, [Number]);
+
+    var poll = Polls.findOne(poll_id);
+    if (poll.type == 'simple' && poll.allowed_votes && options.length > poll.allowed_votes) { return; }
+
     var userId = user_id();
     Votes.upsert({voter: userId, poll: poll_id}, {$set: {options: options, created: new Date()}});
   },
@@ -10,11 +14,12 @@ Meteor.methods({
     check(name, String);
     check(description, String);
     check(type, String);
-    if (!(type == 'single' || type == 'multi' || type == 'ranked')) { throw "Unexpected Type"; }
+    if (!(type == 'simple' || type == 'ranked')) { throw "Unexpected Type"; }
     var id = Polls.insert({
       name: name,
       description: description,
       type: type,
+      allowed_votes: 1,
       owner: Meteor.userId(),
       created: new Date(),
       editable: true,
@@ -22,6 +27,20 @@ Meteor.methods({
     });
     console.log("Created poll: " + id);
     return id;
+  },
+
+  save_options: function(pollId, allowed_votes, editable) {
+    check(pollId, String);
+    check(allowed_votes, Number);
+    check(editable, Boolean);
+
+    if (!is_admin()) {
+      var poll = Polls.findOne(pollId);
+      if (poll.owner != Meteor.user().username) {
+        throw "Not allowed to edit options";
+      }
+    }
+    Polls.update(pollId, {$set: {allowed_votes: allowed_votes, editable: editable}});
   },
 
   debug_reset: function() {
@@ -38,7 +57,6 @@ Meteor.methods({
 
 Meteor.publish("votes", function(pollId) {
   var votes = Votes.find({poll: pollId});
-  console.log("vote count:" + votes.count() + ", " + pollId);
   return votes;
 });
 

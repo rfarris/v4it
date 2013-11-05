@@ -4,16 +4,21 @@
 
 <template name="poll">
   {{#with poll}}
-  <div class="well">
+  <div class="jumbotron">
     <h1>{{name}}</h1>
     <p class="lead">{{description}}</p>
-    {{{template_by_type}}
-    
+  </div>
+
+  <div class="container">
+      {{{template_by_type}}
+  
     {{#if editable}}
-    <div class="form-inline col-lg-12" role="form">
-      <div class="form-group col-lg-12">
-        <label class="sr-only" for="new_poll">Add option</label>
-        <input type="text" class="form-control input-lg col-lg-12" id="new_poll" placeholder="Add option">
+    <div class="row">
+      <div class="form-inline" role="form">
+        <div class="form-group">
+          <label class="sr-only" for="new_poll">Add option</label>
+          <input type="text" class="form-control input-lg" id="new_poll" placeholder="Add option">
+        </div>
       </div>
     </div>
     {{/if}}
@@ -21,13 +26,29 @@
   {{/with}}
 </template>
 
-
-<template name="single">
+<template name="simple">
+  {{#if is_owner}}
+  <div class="row" style="margin-bottom: 10px">
+    <form class="form-inline" role="form">
+      <div class="form-group">
+        <label for="allowed_votes">Allowed votes</label>
+        <input type="number" class="form-control" style="width: 80px" id="allowed_votes" value="{{allowed_votes}}" min="1">
+      </div>
+      <div class="checkbox" style="margin-left: 10px">
+        <label>
+          <input id="editable" type="checkbox" {{#if editable}}CHECKED{{/if}}> Allow adding of options.
+        </label>
+      </div>
+      <button type="submit" id="save_options" class="btn btn-default btn-sm">Save</button>
+    </form>
+  </div>
+  {{/if}}
+  <div class="row">
   <div class="list-group">
     {{#each options}}
       <a href="#" class="list-group-item vote-options" id="{{_id}}">
         {{#if voted_for}}
-          <span class="glyphicon glyphicon-star"></span>
+          <span class="glyphicon glyphicon-ok"></span>
         {{/if}}
         {{name}}
         <div class="progress" style="float: right; width:25%">
@@ -37,4 +58,5 @@
       </a>
     {{/each}}
     </div>
+  </div>
 </template>
