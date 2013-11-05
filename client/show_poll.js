@@ -36,10 +36,10 @@ var fn_is_owner = function() {
 
 Template.poll.helpers({
   template_by_type: function() {
-    if (this.type == "single") {
-      return Template.single(this);
-    } else if (this.type == "simple") {
+    if (this.type == "simple") {
       return Template.simple(this);
+    } else if (this.type == "ranked") {
+      return Template.ranked(this);
     }
 
     return "<h3>Not implemented.</h3>";
@@ -113,3 +113,89 @@ Template.simple.events({
     return false;
   }
 });
+
+
+// ranked 
+
+
+Template.ranked.helpers({
+  is_owner: fn_is_owner,
+  has_not_voted: function() {
+    if (Votes.findOne({poll: Session.get('poll_id'), voter: user_id()})) {
+      return false;
+    }
+    return true;
+  },
+
+  sorted_scores: function() {
+    var votes = Votes.find({}).fetch();
+    var poll = Polls.findOne(Session.get('poll_id'));
+    var total = poll.options.length;
+    
+    // tally scores for every option.
+    results = [];
+
+    var totalPoints = 0;
+    for (var i=0; i < poll.options.length; i++) {
+      var result = {};
+      result.score = 0;
+      result.name = poll.options[i].name
+      for (var j=0; j < votes.length; j++) {
+        var index = $.inArray(poll.options[i]._id, votes[j].options);
+        if (index >= 0) {
+          result.score = result.score + total - index;
+        }
+      }
+      totalPoints += result.score;
+      results.push(result);
+    }
+
+    for (var i=0; i < results.length; i++) {
+      results[i].percent_score = Math.round((results[i].score / totalPoints) * 100);
+    }
+
+    results.sort(function(a, b) {
+      if (a.score == b.score) { return 0; }
+      if (a.score > b.score) { return -1; }
+      if (a.score < b.score) { return 1; }
+    });
+    
+    var html = "";
+    for (var i=0; i < results.length; i++) {
+      // TODO figure out why it isn't reactive.
+      // html = html + Template.ranked_item(results[i]);
+
+      html += '<li class="list-group-item">' + results[i].name + '<div class="progress" style="float: right; width:25%"><div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="' + results[i].percent_score + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + results[i].percent_score + '%" /></div><span class="badge" style="float: right; margin-right: 5px">' + results[i].score + '</span></li>';
+
+    }
+    return html;
+  }
+});
+
+Template.ranked.events({
+  'click #save_options' : function(event) {
+    var votes = parseInt($("#allowed_votes").val(), 10);
+    var editable = $("#editable").is(":checked");
+    Meteor.call('save_options', Session.get('poll_id'), votes, editable);
+    return false;
+  },
+
+  'click #save_ranking': function(event) {
+    var options = [];
+    $("#sortable > li").each(function() {
+      options.push(parseInt($(this).attr('id'), 10));
+    });
+    Meteor.call('vote', Session.get('poll_id'), options);
+    return false;
+  },
+
+  'click #revote': function(event) {
+    Meteor.call('delete_vote', Session.get('poll_id'));
+    return false;
+  }
+});
+
+Template.ranked.rendered = function() {
+  $("#sortable").sortable();
+  $("#sortable").disableSelection();
+};

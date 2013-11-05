@@ -1,7 +1,3 @@
-
-
-
-
 <template name="poll">
   {{#with poll}}
   <div class="jumbotron">
@@ -59,4 +55,51 @@
     {{/each}}
     </div>
   </div>
+</template>
+
+
+<template name="ranked">
+  {{#if is_owner}}
+  <div class="row" style="margin-bottom: 10px">
+    <form class="form-inline" role="form">
+      <div class="checkbox" style="margin-left: 10px">
+        <label>
+          <input id="editable" type="checkbox" {{#if editable}}CHECKED{{/if}}> Allow adding of options.
+        </label>
+      </div>
+      <button type="submit" id="save_options" class="btn btn-default btn-sm">Save</button>
+    </form>
+  </div>
+  {{/if}}
+  {{#if has_not_voted}}
+  <ul id="sortable" class="list-group">
+    {{#each options}}
+    <li class="list-group-item" id="{{_id}}">{{name}}</li>
+    {{/each}}
+  </ul>
+  <div class="row">
+    <button type="submit" style="float:right; clear: left" id="save_ranking" class="btn btn-default btn-md">Save</button>
+  </row>
+  {{else}}
+  <div class="row">
+    <ul class="list-group">
+      {{{sorted_scores}}}
+    </ul>
+  </div>
+  <div class="row">
+    <button type="submit" style="float:right; clear: left" id="revote" class="btn btn-default btn-md">Revote</button>
+  </row>
+  {{/if}}
+</template>
+
+
+<!-- non-reactive for some reason.  TODO figure out -->
+<template name="ranked_item">
+  <li class="list-group-item">
+        {{name}}
+        <div class="progress" style="float: right; width:25%">
+          <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="{{percent_score}}" aria-valuemin='0' aria-valuemax='100' style="width: {{percent_score}}%" />
+        </div>
+        <span class="badge" style="float: right; margin-right: 5px">{{score}}</span>
+      </li>
 </template>

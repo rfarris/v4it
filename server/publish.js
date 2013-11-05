@@ -4,10 +4,19 @@ Meteor.methods({
     check(options, [Number]);
 
     var poll = Polls.findOne(poll_id);
-    if (poll.type == 'simple' && poll.allowed_votes && options.length > poll.allowed_votes) { return; }
+    if (poll.type == 'simple' && poll.allowed_votes && options.length > poll.allowed_votes) { 
+      console.log('too many votes.  ignoring.');
+      return; 
+    }
 
     var userId = user_id();
     Votes.upsert({voter: userId, poll: poll_id}, {$set: {options: options, created: new Date()}});
+  },
+
+  delete_vote: function(poll_id) {
+    check(poll_id, String);
+    var removed = Votes.remove({poll: poll_id, voter: user_id()});
+    console.log('removed: ' + removed + ", " + poll_id + ", " + user_id());
   },
 
   create_poll: function(name, description, type) {
@@ -75,10 +84,6 @@ var anonymous = function(user_id) {
   return false;
 }
 
-var admin_or_owner = function(userId, doc) {
-  
-}
-
 Polls.allow({
   insert: function(userId, poll) {
     if (anonymous(userId)) { return false; }
@@ -104,5 +109,3 @@ Accounts.onCreateUser(function(options, user) {
     console.log("Error on account creation: " + err + ", " + JSON.stringify(options, undefined, 2));
   }
 });
-
-console.log("starting");

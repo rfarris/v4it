@@ -1,5 +1,22 @@
 Template.landing.helpers({
-  polls: function() { return Polls.find({}, {sort: {timestamp: -1}}); }
+  polls: function() { return Polls.find({}, {sort: {timestamp: -1}}); },
+
+  slogan: function() {
+    var patronizingSlogans = [
+      "Choose from one of the classy polls below.",
+      "Everyone wants to know what you think.",
+      "Your contributions raise the tone of discorse.",
+      "Democracy drives the world forward.",
+      "Your input drives the process.",
+      "Don't keep others waiting on your valuable insights.",
+      "An opinion is all you need to contribute.",
+      "Voices in harmony.",
+      "Fuck you.",
+      "Engagement begets enlightenment."
+      ];
+    var index = Math.floor(Math.random() * patronizingSlogans.length);
+    return patronizingSlogans[index];
+  }
 });
 
 Template.landing.events({
