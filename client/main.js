@@ -17,6 +17,7 @@ Meteor.Router.add({
 Meteor.startup(function() {
   // get all polls
   Meteor.subscribe('polls');
+  Meteor.subscribe('txt');
   // get votes for currently selected poll
   Deps.autorun(function() {
     Meteor.subscribe('votes', Session.get('poll_id'));

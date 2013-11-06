@@ -33,6 +33,12 @@ var fn_is_owner = function() {
   return false;
 }
 
+var delete_poll = function() {
+  Meteor.call('delete_poll', Session.get('poll_id'));
+  window.location = "/";
+  return false;
+}
+
 
 Template.poll.helpers({
   template_by_type: function() {
@@ -102,7 +108,9 @@ Template.simple.events({
     }
     Meteor.call('vote', Session.get('poll_id'), options);
     return false;
-  }
+  },
+
+  'click #delete_poll': delete_poll
 });
 
 Template.simple.events({
@@ -192,7 +200,9 @@ Template.ranked.events({
   'click #revote': function(event) {
     Meteor.call('delete_vote', Session.get('poll_id'));
     return false;
-  }
+  },
+
+  'click #delete_poll': delete_poll
 });
 
 Template.ranked.rendered = function() {

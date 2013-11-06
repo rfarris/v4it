@@ -38,6 +38,18 @@ Meteor.methods({
     return id;
   },
 
+  delete_poll: function(pollId) {
+    check(pollId, String);
+    var poll = Polls.findOne(pollId);
+    if (!is_admin()) {
+      var poll = Polls.findOne(pollId);
+      if (poll.owner != Meteor.user().username) {
+        throw "Not allowed to delete";
+      }
+    }
+    Polls.remove({_id: pollId});
+  },
+
   save_options: function(pollId, allowed_votes, editable) {
     check(pollId, String);
     check(allowed_votes, Number);
@@ -71,6 +83,11 @@ Meteor.publish("votes", function(pollId) {
 
 Meteor.publish("polls", function() {
   return Polls.find({}, {sort: {timestamp: -1}});
+});
+
+Meteor.publish("txt", function() {
+  console.log('txt: ' + Txt.find({}).count());
+  return Txt.find({});
 });
 
 Meteor.publish(null, function() {

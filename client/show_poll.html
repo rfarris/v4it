@@ -36,7 +36,9 @@
         </label>
       </div>
       <button type="submit" id="save_options" class="btn btn-default btn-sm">Save</button>
+      <button class="btn btn-danger btn-sm pull-right" id="delete_poll">Delete</button>
     </form>
+
   </div>
   {{/if}}
   <div class="row">
@@ -68,6 +70,7 @@
         </label>
       </div>
       <button type="submit" id="save_options" class="btn btn-default btn-sm">Save</button>
+      <button class="btn btn-danger btn-sm pull-right" id="delete_poll">Delete</button>
     </form>
   </div>
   {{/if}}
@@ -78,7 +81,8 @@
     {{/each}}
   </ul>
   <div class="row">
-    <button type="submit" style="float:right; clear: left" id="save_ranking" class="btn btn-default btn-md">Save</button>
+    Drag the items to rank them, then click<span class="glyphicon glyphicon-arrow-right" style="padding-left: 10px"></span>
+    <button type="submit" id="save_ranking" class="btn btn-default btn-md pull-right">Save</button>
   </row>
   {{else}}
   <div class="row">
