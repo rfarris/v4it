@@ -86,7 +86,6 @@ Meteor.publish("polls", function() {
 });
 
 Meteor.publish("txt", function() {
-  console.log('txt: ' + Txt.find({}).count());
   return Txt.find({});
 });
 
